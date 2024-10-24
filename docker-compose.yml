@@ -1,0 +1,7 @@
+version: '3.8'
+
+services:
+  react-app:
+    build: .
+    ports:
+      - "80:80"  # Map port 3000 on the host to port 80 on the container
