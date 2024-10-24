@@ -699,9 +699,34 @@ useEffect(() => {
     // setPopupVisible(true);
     setHasShownPopup(true);
   }
+ 
   handleSearch();
+  // getLiveLocation()
+
+  const fetchFreeChargingStations = async (lat, lng) => {
+    try {
+      const response = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=5000&keyword=free%20charging&key=AIzaSyBersaeDEX1FoAovB3DXTgVzMS3eBC_GLY`
+      );
+  
+      console.log("Free Charging Stations Response:", response.data);
+  
+      if (response.data.results.length > 0) {
+        setFreeChargingStations(response.data.results);
+      } else {
+        console.warn('No free charging stations found in the area.');
+        setFreeChargingStations([]);
+      }
+    } catch (error) {
+      console.error('Error fetching free charging stations:', error);
+    }
+  };
+
+  
   const storedLatitude = localStorage.getItem('userLatitude');
   const storedLongitude = localStorage.getItem('userLongitude');
+  // setUserLocation({ storedLatitude, storedLongitude })
+  fetchFreeChargingStations({ lat: parseFloat(storedLatitude), lng: parseFloat(storedLongitude) })
 
   if (storedLatitude && storedLongitude) {
     setCountryCoords({ lat: parseFloat(storedLatitude), lng: parseFloat(storedLongitude) });
@@ -1262,14 +1287,14 @@ const linkStyle = {
       </div>
       </li>
         {/* ----------------------------------------PlugShare Store--------------------------------------- */}
-      <li>
+      {/* <li>
        <div className="dropdown">
         <div className="select" >
           <MdOutlineLocalGroceryStore  style={{ marginRight: '8px',color: '#738677' }} />
           <span className="selected">PlugShare Store</span>
         </div>
       </div>
-      </li>
+      </li> */}
   {/* ----------------------------------------Get the App--------------------------------------- */}
       <li>
    <div className="dropdown">
